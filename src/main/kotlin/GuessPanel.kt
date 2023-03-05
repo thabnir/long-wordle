@@ -4,8 +4,6 @@ import javax.swing.JPanel
 class GuessPanel(val graphicsPanel: GraphicsPanel) : JPanel() {
     val wordle
         get() = graphicsPanel.wordle
-    val prevGuesses
-        get() = graphicsPanel.wordle.guessedWords
     val hints
         get() = graphicsPanel.wordle.hints
     val currentGuess
@@ -15,7 +13,6 @@ class GuessPanel(val graphicsPanel: GraphicsPanel) : JPanel() {
 
     init {
         layout = GridLayout(Wordle.maxGuesses, wordle.wordLength)
-        //border = BorderFactory.createEmptyBorder(10, 10, 10, 10)
         for (i in 0 until Wordle.maxGuesses) {
             for (j in 0 until wordle.wordLength) {
                 val letterBox = LetterBox(i, j)
@@ -24,8 +21,7 @@ class GuessPanel(val graphicsPanel: GraphicsPanel) : JPanel() {
             }
         }
         preferredSize = Dimension(
-            wordle.wordLength * grid[0].preferredSize.width,
-            Wordle.maxGuesses * grid[0].preferredSize.height
+            wordle.wordLength * grid[0].preferredSize.width, Wordle.maxGuesses * grid[0].preferredSize.height
         )
         minimumSize = preferredSize
         maximumSize = preferredSize

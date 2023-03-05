@@ -17,12 +17,6 @@ class GraphicsPanel : JPanel() {
     var lightFontColor = Color(241, 241, 241)
     var darkFontColor = Color(50, 50, 50)
 
-
-    // TODO: figure out how to make the key bindings work
-    // rn it's just a keyListener on the keyboard panel, but I want pressing said key to cause the button to be pressed
-    // that way the button visually indicates that it is pressed
-    // also it doesn't work when out of focus which might be a problem
-
     val mainFont = Font("Lucida", Font.PLAIN, 24)
 
     val screenSize: Dimension = Toolkit.getDefaultToolkit().screenSize
@@ -36,15 +30,11 @@ class GraphicsPanel : JPanel() {
     val scrollPane =
         JScrollPane(this, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED)
 
-    var yPad = 5
-    var xPad = 5
-
     init {
         val pad = 50
         macStuff()
         layout = BoxLayout(this, BoxLayout.Y_AXIS)
         font = mainFont
-        //border = BorderFactory.createEmptyBorder(yPad, xPad + scrollPane.verticalScrollBar.width, yPad, xPad)
         maximumSize = Dimension(screenSize.width, Int.MAX_VALUE)
         frame.minimumSize = Dimension(
             guessPanel.preferredSize.width + scrollPane.verticalScrollBar.width + pad,
@@ -76,7 +66,6 @@ class GraphicsPanel : JPanel() {
                 } else if (e.keyCode == KeyEvent.VK_BACK_SPACE) {
                     backspace()
                 }
-                // println("guess: ${String(guess.toCharArray())}")
             }
 
             override fun keyReleased(e: KeyEvent) {}
@@ -85,9 +74,6 @@ class GraphicsPanel : JPanel() {
         frame.addComponentListener(object : ComponentAdapter() {
             override fun componentResized(e: ComponentEvent) {
                 val s = this@GraphicsPanel.size
-//                this@GraphicsPanel.border = BorderFactory.createEmptyBorder(
-//                    yPad, xPad + scrollPane.verticalScrollBar.width, yPad, xPad
-//                )
                 repaint()
             }
         })
@@ -106,10 +92,6 @@ class GraphicsPanel : JPanel() {
 
         frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
         frame.isResizable = true
-    }
-
-    fun scrollToBottom() {
-        scrollPane.verticalScrollBar.value = scrollPane.verticalScrollBar.maximum
     }
 
     fun macStuff() {

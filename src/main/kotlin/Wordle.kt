@@ -12,8 +12,6 @@ class Wordle(wordSource: Int = WORDLES, startWord: String? = null, numLetters: I
     val guessedWords = ArrayList<String>(maxGuesses)
     val numGuesses: Int
         get() = guessedWords.size
-    val guessesLeft: Int
-        get() = maxGuesses - guessedWords.size
     val indexLettersCorrect = HashSet<IndexChar>(40) // find a way to prevent duplicates
     val indexLettersMismatched = HashSet<IndexChar>(40) // or don't, IDK, it's just an optimization
 
@@ -27,8 +25,6 @@ class Wordle(wordSource: Int = WORDLES, startWord: String? = null, numLetters: I
         get() = word in guessedWords
 
     val lettersUnused = ArrayList(alphabet)
-
-    val solver = Solver()
 
     fun makeGuess(str: String): Boolean {
         val guess = str.lowercase()
@@ -51,21 +47,6 @@ class Wordle(wordSource: Int = WORDLES, startWord: String? = null, numLetters: I
         hints.add(hint)
         guessedWords.add(guess)
         lettersUnused.removeAll(guess.toCharArray().toMutableList())
-
-//        print("Corrects: ")
-//        indexLettersCorrect.sorted().toTypedArray().forEach { print(it.char) }
-//        println()
-//
-//        print("Mismatched: ")
-//        indexLettersMismatched.sorted().toTypedArray().forEach { print(it.char) }
-//        println()
-//        print("Incorrect: ${lettersIncorrect.sorted().toTypedArray().contentDeepToString()}")
-//        println()
-//        print("Unused: ${lettersUnused.sorted().toTypedArray().contentDeepToString()}")
-//        println()
-
-        solver.lengthPrune()
-        solver.pruneWords()
 
         if (numGuesses == maxGuesses && guess != word) {
             println("You lose! The word was $word") // TODO: make this a GUI thing
@@ -95,10 +76,10 @@ class Wordle(wordSource: Int = WORDLES, startWord: String? = null, numLetters: I
         var maxGuesses = 6
 
         fun getRandomWord(wordSource: Int): String {
-            when (wordSource) {
-                ALL_WORDS -> return lexicon.random()
-                WORDLES -> return wordles.random()
-                FIVE_LETTER_WORDS -> return fiveLetterWords.random()
+            return when (wordSource) {
+                ALL_WORDS -> lexicon.random()
+                WORDLES -> wordles.random()
+                FIVE_LETTER_WORDS -> fiveLetterWords.random()
                 else -> throw IllegalArgumentException("Invalid word source")
             }
         }
@@ -144,48 +125,4 @@ class Wordle(wordSource: Int = WORDLES, startWord: String? = null, numLetters: I
             return index.compareTo(other.index)
         }
     }
-
-    inner class Solver {
-
-        // todo: add a predicate to filter out words that have the wrong number of a certain letter
-        // e.g., if the word is "eaten" and the user has guessed "evens", then the predicate should remove all words that don't have at least 2 e's
-        // additionally, the predicate should remove all words that have more than 2 e's if the user has guessed "eerie"
-
-        var words = ArrayList<String>()
-        var possibleLetters = ArrayList<IndexChar>()
-        var impossibleLetters = ArrayList<IndexChar>()
-
-        init {
-            words = lexicon.toCollection(ArrayList())
-            lengthPrune()
-        }
-
-        fun lengthPrune() {
-            words.removeIf { it.length != wordLength }
-        }
-
-        fun pruneWords() {
-            words.removeIf { word -> lettersIncorrect.any { word.contains(it) } }
-            println("Pruned words: ${words.size}")
-            if (!words.contains(word)) println("incorrect letters predicate failed")
-
-            words.removeIf { word -> indexLettersCorrect.any { word[it.index] != it.char } }
-            println("Pruned words: ${words.size}")
-            if (!words.contains(word)) println("correct letters predicate failed")
-
-            words.removeIf { indexLettersMismatched.any { word[it.index] == it.char } }
-            println("Pruned words: ${words.size}")
-            if (!words.contains(word)) println("mismatched letters predicate 1 failed")
-
-            words.removeIf { indexLettersMismatched.any { !word.contains(it.char) } }
-            println("Pruned words: ${words.size}")
-            if (!words.contains(word)) println("mismatched letters predicate 2 failed")
-        }
-
-        // add a predicate to filter out words that have the wrong number of a certain letter; min and max repeats
-        // e.g., if the word is "eaten" and the user has guessed "evens", then the predicate should remove all words that don't have at least 2 e's
-        // additionally, the predicate should remove all words that have more than 2 e's if the user has guessed "eerie"
-    }
-
-
 }

@@ -1,8 +1,6 @@
 import java.awt.*
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
-import java.awt.event.KeyEvent
-import java.awt.event.KeyListener
 import javax.swing.*
 
 class KeyboardPanel(val graphicsPanel: GraphicsPanel) : JPanel() {
@@ -38,9 +36,7 @@ class KeyboardPanel(val graphicsPanel: GraphicsPanel) : JPanel() {
             KeyButton('m')
         )
     )
-    val keyMap = qwertyKeyboard.flatten().associateBy { it.label }
     val keyList = qwertyKeyboard.flatten().toList()
-    val guess = graphicsPanel.guess
     val wordle = graphicsPanel.wordle
 
     init {
