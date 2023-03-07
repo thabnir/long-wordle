@@ -1,6 +1,6 @@
-# KWordle
+# long-wordle
 
-KWordle is a Wordle clone written in Kotlin.
+long-wordle is a Wordle clone written in Kotlin.
 
 Only, this one chooses from the entire English dictionary.
 
