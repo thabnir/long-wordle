@@ -6,6 +6,6 @@ Only, this one chooses from the entire English dictionary.
 
 It's a lot harder.
 
-![Screenshot 1](./src/main/resources/screenshots/failure.png)
-![Screenshot 2](./src/main/resources/screenshots/backspliced.png)
-![Screenshot 3](./src/main/resources/screenshots/fuck.png)
+![failure](./src/main/resources/screenshots/failure.png)
+![success](./src/main/resources/screenshots/backspliced.png)
+![fuck](./src/main/resources/screenshots/fuck.png)
